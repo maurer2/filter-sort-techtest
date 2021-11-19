@@ -1,0 +1,32 @@
+{
+  "name": "dtl-technical-test",
+  "version": "1.0.0",
+  "description": "decision technologies front-end technical test",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "concurrently \"npm run db\" \"npm run serve\"",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watchAll --runInBand",
+    "db": "json-server --watch public/db.json",
+    "serve": "rollup --config rollup.config.js --watch",
+    "clean": "rimraf public/scripts public/styles"
+  },
+  "devDependencies": {
+    "@babel/core": "7.15.0",
+    "@babel/preset-env": "7.15.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "27.0.6",
+    "concurrently": "^6.2.1",
+    "jest": "27.0.6",
+    "jest-transform-stub": "2.0.0",
+    "json-server": "0.15.1",
+    "rimraf": "3.0.0",
+    "rollup": "2.56.3",
+    "rollup-plugin-livereload": "2.0.5",
+    "rollup-plugin-sass": "1.2.5",
+    "rollup-plugin-serve": "1.1.0"
+  },
+  "resolutions": {
+    "babel-core": "7.0.0-bridge.0"
+  }
+}
