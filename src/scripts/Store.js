@@ -32,7 +32,7 @@ class Store extends Observable {
        */
       productFilters: [],
       /**
-       * @type number[]
+       * @type number
        */
       providerFilter: null,
       /**
@@ -124,6 +124,10 @@ class Store extends Observable {
     this.notify(this.state);
   }
 
+  /**
+   * @param {number} value
+   * @returns {void}
+   */
   setProviderFilter(value = null) {
     this.state.providerFilter = value;
     this.notify(this.state);
