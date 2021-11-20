@@ -2,7 +2,7 @@ import Observable from "./Observable";
 
 /**
  * @typedef Deal
- * @type {Object}
+ * @type {object}
  * @property {number} id
  * @property {string} title
  * @property {object} provider
@@ -31,7 +31,17 @@ class Store extends Observable {
        * @type string[]
        */
       productFilters: [],
-      providerFilter: null
+      /**
+       * @type number[]
+       */
+      providerFilter: null,
+      /**
+       * @typedef {{string, string}} productTypeReplacements
+       */
+      productTypeReplacements: {
+        "Fibre Broadband": "Broadband",
+        "Phone": ''
+      }
     };
   }
 
@@ -72,11 +82,8 @@ class Store extends Observable {
       return preFilterDeals;
     }
 
+    const {productTypeReplacements} = this.state;
     const productFiltersSorted = this.getProductFiltersSorted;
-    const productTypeReplacements = {
-      "Fibre Broadband": "Broadband",
-      "Phone": ''
-    };
 
     const dealsMatchingProductFilters = preFilterDeals.filter((deal) => {
       const productTypesSorted = [...deal.productTypes]
