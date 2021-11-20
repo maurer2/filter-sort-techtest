@@ -50,6 +50,15 @@ class Store extends Observable {
   }
 
   /**
+   * @returns {string[]}
+   */
+  get getProductFiltersSorted () {
+    const productFiltersLowerCaseSorted = [...this.state.productFilters]
+        .map((productFilter) => productFilter.toLowerCase())
+        .sort();
+
+    return productFiltersLowerCaseSorted;
+  }
    * @returns {Deal[]}
    */
   filterByProductFilter() {
@@ -58,9 +67,8 @@ class Store extends Observable {
       return deals;
     }
 
-    const productFiltersSorted = [...productFilters]
-        .map((productFilter) => productFilter.toLowerCase())
-        .sort();
+    const {deals} = this.state;
+    const productFiltersSorted = this.getProductFiltersSorted;
     const productTypeReplacements = {
       "Fibre Broadband": "Broadband",
       "Phone": ''
