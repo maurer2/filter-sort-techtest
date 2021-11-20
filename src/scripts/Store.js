@@ -35,12 +35,54 @@ class Store extends Observable {
     };
   }
 
+  /**
+   * @returns {Deal[]}
+   */
   get deals() {
-    return this.filter();
+    return this.filterByProductFilter();
   }
 
-  filter() {
-    return this.state.deals;
+  /**
+   * @returns {boolean}
+   */
+  get hasProductFilters () {
+    return Boolean(this.state.productFilters.length);
+  }
+
+  /**
+   * @returns {Deal[]}
+   */
+  filterByProductFilter() {
+    const {productFilters, deals} = this.state;
+    if (!this.hasProductFilters) {
+      return deals;
+    }
+
+    const productFiltersSorted = [...productFilters]
+        .map((productFilter) => productFilter.toLowerCase())
+        .sort();
+    const productTypeReplacements = {
+      "Fibre Broadband": "Broadband"
+    };
+
+    const dealsMatchingProductFilters = deals.filter((deal) => {
+      const productTypesSorted = [...deal.productTypes]
+        .map((productType) => {
+          const transformedProductType = (productType in productTypeReplacements)
+            ? productTypeReplacements[productType]
+            : productType;
+
+          return transformedProductType.toLowerCase();
+        })
+        .filter((productType) => productType !== 'phone')
+        .sort();
+
+      const typesAndFiltersAreMatching = JSON.stringify(productTypesSorted) === JSON.stringify(productFiltersSorted);
+
+      return typesAndFiltersAreMatching;
+    });
+
+    return dealsMatchingProductFilters;
   }
 
   setDeals(data) {
