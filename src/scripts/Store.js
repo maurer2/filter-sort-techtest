@@ -50,9 +50,10 @@ class Store extends Observable {
    */
   get deals() {
     const unfilteredDeals = this.state.deals;
-    const filteredDeals = this.filterByProductFilter(unfilteredDeals);
+    const filteredByProductDeals = this.filterByProductFilter(unfilteredDeals);
+    const filteredByProviderDeals = this.filterByProviderFilter(filteredByProductDeals);
 
-    return filteredDeals;
+    return filteredByProviderDeals;
   }
 
   /**
@@ -71,6 +72,13 @@ class Store extends Observable {
         .sort();
 
     return productFiltersLowerCaseSorted;
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  get hasProviderFilters () {
+    return Boolean(this.state.providerFilter !== null);
   }
 
   /**
@@ -106,6 +114,29 @@ class Store extends Observable {
     });
 
     return dealsMatchingProductFilters;
+  }
+
+  /**
+   * @param {Deal[]} preFilterDeals
+   * @returns {Deal[]}
+   */
+  filterByProviderFilter (preFilterDeals) {
+    if (!this.hasProviderFilters) {
+      return preFilterDeals;
+    }
+
+    const {providerFilter} = this.state;
+
+    const dealsMatchingProviderFilter = preFilterDeals.filter((deal) => {
+      const dealProviderId = deal.provider.id;
+
+      const isMatching = providerFilter === dealProviderId;
+
+      return isMatching;
+    });
+
+
+    return dealsMatchingProviderFilter;
   }
 
   setDeals(data) {
