@@ -18,6 +18,7 @@
     "babel-jest": "27.0.6",
     "concurrently": "^6.2.1",
     "eslint": "^8.2.0",
+    "eslint-plugin-jsdoc": "^37.0.3",
     "jest": "27.0.6",
     "jest-transform-stub": "2.0.0",
     "json-server": "0.15.1",

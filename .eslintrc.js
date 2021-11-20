@@ -4,7 +4,10 @@ module.exports = {
         "es2021": true,
         "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+      "eslint:recommended",
+      "plugin:jsdoc/recommended"
+    ],
     "parserOptions": {
         "ecmaVersion": 13,
         "sourceType": "module"
@@ -258,5 +261,6 @@ module.exports = {
             "error",
             "never"
         ]
-    }
+    },
+    "plugins": ["jsdoc"]
 };
