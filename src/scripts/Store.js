@@ -62,7 +62,8 @@ class Store extends Observable {
         .map((productFilter) => productFilter.toLowerCase())
         .sort();
     const productTypeReplacements = {
-      "Fibre Broadband": "Broadband"
+      "Fibre Broadband": "Broadband",
+      "Phone": ''
     };
 
     const dealsMatchingProductFilters = deals.filter((deal) => {
@@ -74,7 +75,7 @@ class Store extends Observable {
 
           return transformedProductType.toLowerCase();
         })
-        .filter((productType) => productType !== 'phone')
+        .filter((productType) => productType !== '')
         .sort();
 
       const typesAndFiltersAreMatching = JSON.stringify(productTypesSorted) === JSON.stringify(productFiltersSorted);
