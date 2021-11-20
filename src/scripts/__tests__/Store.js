@@ -17,6 +17,19 @@ describe("Filtering", () => {
 
     it("THEN should return all deals", () => {
       expect(result).toEqual(mockData.deals);
+      expect(result.length).toBe(11);
+    });
+
+    it("THEN hasProductFilters should be false", () => {
+      expect(store.hasProductFilters).toEqual(false);
+    });
+
+    it("THEN hasProductFilters should be empty", () => {
+      expect(store.getProductFiltersSorted).toEqual([]);
+    });
+
+    it("THEN hasProviderFilters should be false", () => {
+      expect(store.hasProviderFilters).toEqual(false);
     });
   });
 });
