@@ -39,7 +39,10 @@ class Store extends Observable {
    * @returns {Deal[]}
    */
   get deals() {
-    return this.filterByProductFilter();
+    const unfilteredDeals = this.state.deals;
+    const filteredDeals = this.filterByProductFilter(unfilteredDeals);
+
+    return filteredDeals;
   }
 
   /**
@@ -59,24 +62,28 @@ class Store extends Observable {
 
     return productFiltersLowerCaseSorted;
   }
+
+  /**
+   * @param {Deal[]} preFilterDeals
    * @returns {Deal[]}
    */
-  filterByProductFilter() {
-    const {productFilters, deals} = this.state;
+  filterByProductFilter(preFilterDeals) {
     if (!this.hasProductFilters) {
-      return deals;
+      return preFilterDeals;
     }
 
-    const {deals} = this.state;
     const productFiltersSorted = this.getProductFiltersSorted;
     const productTypeReplacements = {
       "Fibre Broadband": "Broadband",
       "Phone": ''
     };
 
-    const dealsMatchingProductFilters = deals.filter((deal) => {
+    const dealsMatchingProductFilters = preFilterDeals.filter((deal) => {
       const productTypesSorted = [...deal.productTypes]
         .map((productType) => {
+          /**
+           * @type string
+           */
           const transformedProductType = (productType in productTypeReplacements)
             ? productTypeReplacements[productType]
             : productType;
