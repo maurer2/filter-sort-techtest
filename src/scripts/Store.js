@@ -1,10 +1,35 @@
 import Observable from "./Observable";
 
+/**
+ * @typedef Deal
+ * @type {Object}
+ * @property {number} id
+ * @property {string} title
+ * @property {object} provider
+ * @property {number} provider.id
+ * @property {string} provider.name
+ * @property {object} cost
+ * @property {number} cost.upfrontCost
+ * @property {number} cost.totalContractCost
+ * @property {string[]} productTypes
+ * @property {number} contractLength
+ */
+
 class Store extends Observable {
   constructor() {
     super();
     this.state = {
+      /**
+       * @type Deal[]
+       */
+      dealsOrg: [],
+      /**
+       * @type Deal[]
+       */
       deals: [],
+      /**
+       * @type string[]
+       */
       productFilters: [],
       providerFilter: null
     };
