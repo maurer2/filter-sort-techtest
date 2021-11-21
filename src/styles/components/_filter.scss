@@ -2,9 +2,28 @@
   position: sticky;
   top: 20px;
 
+  @media screen and (min-width: 576px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  @media screen and (min-width: 992px) {
+    display: block;
+  }
+
   &__title {
     font-size: 16px;
     margin-bottom: 10px;
+
+    @media screen and (min-width: 576px) {
+      margin-bottom: 0;
+      grid-column: 1/-1;
+    }
+
+    @media screen and (min-width: 992px) {
+      margin-bottom: 10px;
+    }
   }
 
   &__group {
