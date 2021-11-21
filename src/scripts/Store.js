@@ -22,10 +22,6 @@ class Store extends Observable {
       /**
        * @type Deal[]
        */
-      dealsOrg: [],
-      /**
-       * @type Deal[]
-       */
       deals: [],
       /**
        * @type string[]
