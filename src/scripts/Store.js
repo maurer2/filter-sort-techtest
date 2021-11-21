@@ -50,6 +50,7 @@ class Store extends Observable {
    */
   get deals() {
     const unfilteredDeals = this.state.deals;
+
     const filteredByProductDeals = this.filterByProductFilter(unfilteredDeals);
     const filteredByProviderDeals = this.filterByProviderFilter(filteredByProductDeals);
     const orderedDeals = this.changeOrder(filteredByProviderDeals);
@@ -149,7 +150,7 @@ class Store extends Observable {
 
     const sortFilterMap = {
       'upfrontCost': this.sortByUpfrontCost,
-      'totalCost': this.sortByTotalCost
+      'totalContractCost': this.sortByTotalContractCost
     };
 
     if (sortFilter in sortFilterMap) {
@@ -187,7 +188,7 @@ class Store extends Observable {
    * @param {Deal[]} unorderedDeals
    * @returns {Deal[]}
    */
-  sortByTotalCost(unorderedDeals) {
+  sortByTotalContractCost(unorderedDeals) {
     const sortedDeals = [...unorderedDeals].sort((dealOne, dealTwo) => {
       const costDealOne = dealOne.cost.totalContractCost;
       const costDealTwo = dealTwo.cost.totalContractCost;
