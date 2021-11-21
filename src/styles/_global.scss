@@ -42,16 +42,35 @@ ul {
 }
 
 .main {
-  display: flex;
+  display: grid;
+  grid-template-areas:
+    "sidebar"
+    "details-container"
+  ;
+  grid-template-columns: 1fr;
+  grid-template-rows:
+    auto
+    1fr
+  ;
+
+  @media screen and (min-width: 768px) {
+    grid-template-areas:
+      "sidebar details-container"
+    ;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: auto;
+  }
 }
 
 .filters-container {
-  width: 300px;
   position: relative;
+  grid-area: sidebar;
+  margin-bottom: 10px;
 }
 
 .deals-container {
   flex-grow: 1;
+  grid-area: details-container;
 }
 
 .deal-list > li:not(:first-child) {
