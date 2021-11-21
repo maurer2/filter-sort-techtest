@@ -8,6 +8,30 @@ const getProviderIdByName = (providerName) => {
   return entry.id;
 };
 
+const getDealsOrderedByProperty = (sortKey) => {
+  const deals = mockData.deals.map((deal) => ({
+    title: deal.title,
+    cost: deal.cost
+  }));
+
+  const sortedDeals = deals.sort((dealOne, dealTwo) => {
+    const costDealOne = dealOne.cost[sortKey];
+    const costDealTwo = dealTwo.cost[sortKey];
+
+    if (costDealOne > costDealTwo) {
+      return 1;
+    }
+
+    if (costDealOne < costDealTwo) {
+      return -1;
+    }
+
+    return 0;
+  });
+
+  return sortedDeals;
+};
+
 let result;
 let store;
 
@@ -189,6 +213,99 @@ describe("Filtering", () => {
 
       const hasEveryTargetType = providerTypes.every((providerType) => targetProviderTypes.includes(providerType));
       expect(hasEveryTargetType).toBe(true);
+    });
+  });
+});
+
+describe("Filtering", () => {
+  beforeEach(() => {
+    store = new Store();
+    store.setDeals(mockData.deals);
+  });
+
+  describe("GIVEN default sort is enabled", () => {
+    beforeEach(() => {
+      store.setSortFilter('default');
+      result = store.deals;
+    });
+
+    it("THEN sorting should not change number of deals", () => {
+      expect(result.length).toBe(11);
+    });
+
+    it("THEN order of should be identical to order in json files", () => {
+      const [
+        firstDeal,
+        secondDeal,
+        thirdDeal,
+        ...rest
+      ] = result;
+      const [lastDeal] = rest.reverse();
+
+      expect(firstDeal.title).toBe(mockData.deals[0].title);
+      expect(secondDeal.title).toBe(mockData.deals[1].title);
+      expect(thirdDeal.title).toBe(mockData.deals[2].title);
+      expect(lastDeal.title).toBe(mockData.deals[mockData.deals.length - 1].title);
+    });
+  });
+
+  describe("GIVEN upfrontCost sort is enabled", () => {
+    beforeEach(() => {
+      store.setSortFilter('upfrontCost');
+      result = store.deals;
+    });
+
+    it("THEN sorting should not change number of deals", () => {
+      expect(result.length).toBe(11);
+    });
+
+    it("THEN order should be upfront cost ascending", () => {
+      const [
+        firstDeal,
+        secondDeal,
+        thirdDeal,
+        ...rest
+      ] = result;
+      const [lastDeal] = rest.reverse();
+
+      expect(firstDeal.title).toBe(getDealsOrderedByProperty('upfrontCost')[0].title);
+      expect(secondDeal.title).toBe(getDealsOrderedByProperty('upfrontCost')[1].title);
+      expect(thirdDeal.title).toBe(getDealsOrderedByProperty('upfrontCost')[2].title);
+      expect(lastDeal.title).toBe(getDealsOrderedByProperty('upfrontCost')[getDealsOrderedByProperty('upfrontCost').length - 1].title);
+
+      expect(firstDeal.cost.upfrontCost).toBeLessThan(secondDeal.cost.upfrontCost);
+      expect(secondDeal.cost.upfrontCost).toBeLessThan(thirdDeal.cost.upfrontCost);
+      expect(thirdDeal.cost.upfrontCost).toBeLessThan(lastDeal.cost.upfrontCost);
+    });
+  });
+
+  describe("GIVEN totalContractCost sort is enabled", () => {
+    beforeEach(() => {
+      store.setSortFilter('totalContractCost');
+      result = store.deals;
+    });
+
+    it("THEN sorting should not change number of deals", () => {
+      expect(result.length).toBe(11);
+    });
+
+    it("THEN order should be upfront cost ascending", () => {
+      const [
+        firstDeal,
+        secondDeal,
+        thirdDeal,
+        ...rest
+      ] = result;
+      const [lastDeal] = rest.reverse();
+
+      expect(firstDeal.title).toBe(getDealsOrderedByProperty('totalContractCost')[0].title);
+      expect(secondDeal.title).toBe(getDealsOrderedByProperty('totalContractCost')[1].title);
+      expect(thirdDeal.title).toBe(getDealsOrderedByProperty('totalContractCost')[2].title);
+      expect(lastDeal.title).toBe(getDealsOrderedByProperty('totalContractCost')[getDealsOrderedByProperty('totalContractCost').length - 1].title);
+
+      expect(firstDeal.cost.upfrontCost).toBeLessThan(secondDeal.cost.totalContractCost);
+      expect(secondDeal.cost.upfrontCost).toBeLessThan(thirdDeal.cost.totalContractCost);
+      expect(thirdDeal.cost.upfrontCost).toBeLessThan(lastDeal.cost.totalContractCost);
     });
   });
 });
