@@ -56,8 +56,9 @@ class Store extends Observable {
     const unfilteredDeals = this.state.deals;
     const filteredByProductDeals = this.filterByProductFilter(unfilteredDeals);
     const filteredByProviderDeals = this.filterByProviderFilter(filteredByProductDeals);
+    const orderedDeals = this.changeOrder(filteredByProviderDeals);
 
-    return filteredByProviderDeals;
+    return orderedDeals;
   }
 
   /**
@@ -141,6 +142,74 @@ class Store extends Observable {
 
 
     return dealsMatchingProviderFilter;
+  }
+
+  /**
+   * @param {Deal[]} unorderedDeals
+   * @returns {Deal[]}
+   */
+  changeOrder (unorderedDeals) {
+    const {sortFilter} = this.state;
+
+    if (sortFilter === 'upfrontCost') {
+      const sortedDeals = this.sortByUpfrontCost(unorderedDeals);
+
+      return sortedDeals;
+    }
+
+    if (sortFilter === 'totalCost') {
+      const sortedDeals = this.sortByTotalCost(unorderedDeals);
+
+      return sortedDeals;
+    }
+
+    return unorderedDeals;
+  }
+
+  /**
+   * @param {Deal[]} unorderedDeals
+   * @returns {Deal[]}
+   */
+  sortByUpfrontCost(unorderedDeals) {
+    const sortedDeals = [...unorderedDeals].sort((dealOne, dealTwo) => {
+      const costDealOne = dealOne.cost.upfrontCost;
+      const costDealTwo = dealTwo.cost.upfrontCost;
+
+      if (costDealOne > costDealTwo) {
+        return 1;
+      }
+
+      if (costDealOne < costDealTwo) {
+        return -1;
+      }
+
+      return 0;
+    });
+
+    return sortedDeals;
+  }
+
+  /**
+   * @param {Deal[]} unorderedDeals
+   * @returns {Deal[]}
+   */
+  sortByTotalCost(unorderedDeals) {
+    const sortedDeals = [...unorderedDeals].sort((dealOne, dealTwo) => {
+      const costDealOne = dealOne.cost.totalContractCost;
+      const costDealTwo = dealTwo.cost.totalContractCost;
+
+      if (costDealOne > costDealTwo) {
+        return 1;
+      }
+
+      if (costDealOne < costDealTwo) {
+        return -1;
+      }
+
+      return 0;
+    });
+
+    return sortedDeals;
   }
 
   setDeals(data) {
