@@ -9,11 +9,14 @@ class ViewDeals {
     if (this.dealList && data.length) {
       const htmlToAppend = this.template.buildDealList(data);
       this.dealList.innerHTML = htmlToAppend;
+    } else {
+      const htmlToAppend = this.template.buildDealListEmpty();
+      this.dealList.innerHTML = htmlToAppend;
     }
   }
 
   update(state) {
-    this.render(this.store.deals)
+    this.render(this.store.deals);
   }
 }
 

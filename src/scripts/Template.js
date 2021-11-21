@@ -2,6 +2,8 @@ class Template {
   constructor() {
     this.deal = document.getElementById("template-deal").innerHTML;
     this.listItem = document.getElementById("template-list-item").innerHTML;
+    this.listItem = document.getElementById("template-list-item").innerHTML;
+    this.listItemEmpty = document.getElementById("template-list-empty-item").innerHTML;
     this.icon = document.getElementById("template-icon").innerHTML;
     this.currencyFormatter = new Intl.NumberFormat("en-GB", {
       style: "currency",
@@ -38,6 +40,10 @@ class Template {
       const dealHtml = this.buildDeal(deal);
       return (result += this.buildListItem(dealHtml));
     }, "");
+  }
+
+  buildDealListEmpty() {
+    return this.listItemEmpty.replace("{{ content }}", 'Sorry, no deals were found for your search 😿.');
   }
 
   buildProductIconList(list) {
