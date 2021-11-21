@@ -34,14 +34,7 @@ class Store extends Observable {
       /**
        * @type string
        */
-      sortFilter: 'default',
-      /**
-       * @typedef {{string, string}} productTypeReplacements
-       */
-      productTypeReplacements: {
-        "Fibre Broadband": "Broadband",
-        "Phone": ''
-      }
+      sortFilter: 'default'
     };
   }
 
@@ -92,7 +85,10 @@ class Store extends Observable {
       return preFilterDeals;
     }
 
-    const {productTypeReplacements} = this.state;
+    const productTypeReplacements = {
+      "Fibre Broadband": "Broadband",
+      "Phone": ''
+    };
     const productFiltersSorted = this.getProductFiltersSorted;
 
     const dealsMatchingProductFilters = preFilterDeals.filter((deal) => {
