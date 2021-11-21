@@ -110,9 +110,9 @@ class Store extends Observable {
         .filter((productType) => productType !== '')
         .sort();
 
-      const typesAndFiltersAreMatching = JSON.stringify(productTypesSorted) === JSON.stringify(productFiltersSorted);
+      const isMatching = JSON.stringify(productTypesSorted) === JSON.stringify(productFiltersSorted);
 
-      return typesAndFiltersAreMatching;
+      return isMatching;
     });
 
     return dealsMatchingProductFilters;
@@ -157,7 +157,6 @@ class Store extends Observable {
       return sortFilterMap[sortFilter](unorderedDeals);
     }
 
-    // 'default' case
     return unorderedDeals;
   }
 
@@ -190,8 +189,8 @@ class Store extends Observable {
    */
   sortByTotalContractCost(unorderedDeals) {
     const sortedDeals = [...unorderedDeals].sort((dealOne, dealTwo) => {
-      const costDealOne = dealOne.cost.totalContractCost;
-      const costDealTwo = dealTwo.cost.totalContractCost;
+      const costDealOne = dealOne.cost.totalContractCost + dealOne.cost.upfrontCost;
+      const costDealTwo = dealTwo.cost.totalContractCost + dealTwo.cost.upfrontCost;
 
       if (costDealOne > costDealTwo) {
         return 1;

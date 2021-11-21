@@ -1,6 +1,11 @@
 import Store from "../Store";
 import mockData from "../../../public/db.json";
 
+const deals = mockData.deals.map((deal) => ({
+  title: deal.title,
+  cost: deal.cost
+}));
+
 const getProviderIdByName = (providerName) => {
   const providers = mockData.deals.map((deal) => deal.provider);
   const entry = providers.find((provider) => provider.name === providerName);
@@ -8,15 +13,29 @@ const getProviderIdByName = (providerName) => {
   return entry.id;
 };
 
-const getDealsOrderedByProperty = (sortKey) => {
-  const deals = mockData.deals.map((deal) => ({
-    title: deal.title,
-    cost: deal.cost
-  }));
-
+const getDealsOrderedByUpfrontCost = () => {
   const sortedDeals = deals.sort((dealOne, dealTwo) => {
-    const costDealOne = dealOne.cost[sortKey];
-    const costDealTwo = dealTwo.cost[sortKey];
+    const costDealOne = dealOne.cost.upfrontCost;
+    const costDealTwo = dealTwo.cost.upfrontCost;
+
+    if (costDealOne > costDealTwo) {
+      return 1;
+    }
+
+    if (costDealOne < costDealTwo) {
+      return -1;
+    }
+
+    return 0;
+  });
+
+  return sortedDeals;
+};
+
+const getDealsOrderedByAllCosts = () => {
+  const sortedDeals = deals.sort((dealOne, dealTwo) => {
+    const costDealOne = dealOne.cost.upfrontCost + dealOne.cost.totalContractCost;
+    const costDealTwo = dealTwo.cost.upfrontCost + dealTwo.cost.totalContractCost;
 
     if (costDealOne > costDealTwo) {
       return 1;
@@ -268,10 +287,10 @@ describe("Filtering", () => {
       ] = result;
       const [lastDeal] = rest.reverse();
 
-      expect(firstDeal.title).toBe(getDealsOrderedByProperty('upfrontCost')[0].title);
-      expect(secondDeal.title).toBe(getDealsOrderedByProperty('upfrontCost')[1].title);
-      expect(thirdDeal.title).toBe(getDealsOrderedByProperty('upfrontCost')[2].title);
-      expect(lastDeal.title).toBe(getDealsOrderedByProperty('upfrontCost')[getDealsOrderedByProperty('upfrontCost').length - 1].title);
+      expect(firstDeal.title).toBe(getDealsOrderedByUpfrontCost()[0].title);
+      expect(secondDeal.title).toBe(getDealsOrderedByUpfrontCost()[1].title);
+      expect(thirdDeal.title).toBe(getDealsOrderedByUpfrontCost()[2].title);
+      expect(lastDeal.title).toBe(getDealsOrderedByUpfrontCost()[getDealsOrderedByUpfrontCost().length - 1].title);
 
       expect(firstDeal.cost.upfrontCost).toBeLessThan(secondDeal.cost.upfrontCost);
       expect(secondDeal.cost.upfrontCost).toBeLessThan(thirdDeal.cost.upfrontCost);
@@ -289,7 +308,7 @@ describe("Filtering", () => {
       expect(result.length).toBe(11);
     });
 
-    it("THEN order should be upfront cost ascending", () => {
+    it("THEN order should be upfront and total cost ascending", () => {
       const [
         firstDeal,
         secondDeal,
@@ -298,14 +317,14 @@ describe("Filtering", () => {
       ] = result;
       const [lastDeal] = rest.reverse();
 
-      expect(firstDeal.title).toBe(getDealsOrderedByProperty('totalContractCost')[0].title);
-      expect(secondDeal.title).toBe(getDealsOrderedByProperty('totalContractCost')[1].title);
-      expect(thirdDeal.title).toBe(getDealsOrderedByProperty('totalContractCost')[2].title);
-      expect(lastDeal.title).toBe(getDealsOrderedByProperty('totalContractCost')[getDealsOrderedByProperty('totalContractCost').length - 1].title);
+      expect(firstDeal.title).toBe(getDealsOrderedByAllCosts()[0].title);
+      expect(secondDeal.title).toBe(getDealsOrderedByAllCosts()[1].title);
+      expect(thirdDeal.title).toBe(getDealsOrderedByAllCosts()[2].title);
+      expect(lastDeal.title).toBe(getDealsOrderedByAllCosts()[getDealsOrderedByAllCosts().length - 1].title);
 
-      expect(firstDeal.cost.upfrontCost).toBeLessThan(secondDeal.cost.totalContractCost);
-      expect(secondDeal.cost.upfrontCost).toBeLessThan(thirdDeal.cost.totalContractCost);
-      expect(thirdDeal.cost.upfrontCost).toBeLessThan(lastDeal.cost.totalContractCost);
+      expect(firstDeal.cost.upfrontCost + firstDeal.cost.upfrontCost).toBeLessThan(secondDeal.cost.totalContractCost + secondDeal.cost.upfrontCost);
+      expect(secondDeal.cost.upfrontCost + secondDeal.cost.upfrontCost).toBeLessThan(thirdDeal.cost.totalContractCost + thirdDeal.cost.upfrontCost);
+      expect(thirdDeal.cost.upfrontCost + thirdDeal.cost.upfrontCost).toBeLessThan(lastDeal.cost.totalContractCost + lastDeal.cost.upfrontCost);
     });
   });
 });
