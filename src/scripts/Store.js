@@ -147,18 +147,16 @@ class Store extends Observable {
   changeOrder (unorderedDeals) {
     const {sortFilter} = this.state;
 
-    if (sortFilter === 'upfrontCost') {
-      const sortedDeals = this.sortByUpfrontCost(unorderedDeals);
+    const sortFilterMap = {
+      'upfrontCost': this.sortByUpfrontCost,
+      'totalCost': this.sortByTotalCost
+    };
 
-      return sortedDeals;
+    if (sortFilter in sortFilterMap) {
+      return sortFilterMap[sortFilter](unorderedDeals);
     }
 
-    if (sortFilter === 'totalCost') {
-      const sortedDeals = this.sortByTotalCost(unorderedDeals);
-
-      return sortedDeals;
-    }
-
+    // 'default' case
     return unorderedDeals;
   }
 
