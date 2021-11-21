@@ -36,6 +36,10 @@ class Store extends Observable {
        */
       providerFilter: null,
       /**
+       * @type string
+       */
+      sortFilter: 'default',
+      /**
        * @typedef {{string, string}} productTypeReplacements
        */
       productTypeReplacements: {
@@ -147,6 +151,7 @@ class Store extends Observable {
   setProductFilter(value) {
     const filter = value.trim().toLowerCase();
     const index = this.state.productFilters.indexOf(filter);
+
     if (index === -1) {
       this.state.productFilters.push(filter);
     } else {
@@ -161,6 +166,15 @@ class Store extends Observable {
    */
   setProviderFilter(value = null) {
     this.state.providerFilter = value;
+    this.notify(this.state);
+  }
+
+  /**
+   * @param {string} value
+   * @returns {void}
+   */
+  setSortFilter(value = 'default') {
+    this.state.sortFilter = value;
     this.notify(this.state);
   }
 }

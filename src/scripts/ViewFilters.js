@@ -7,8 +7,12 @@ class ViewFilters {
     this.providerFilters = Array.from(
       document.getElementsByClassName("js-filter-provider")
     );
+    this.sortFilters = Array.from(
+      document.getElementsByClassName("js-filter-sorting")
+    );
     this.onProductFilterChange = this.onProductFilterChange.bind(this);
     this.onProviderFilterChange = this.onProviderFilterChange.bind(this);
+    this.onSortFilterChange = this.onSortFilterChange.bind(this);
     this.addFilterEventHandlers();
   }
 
@@ -23,6 +27,11 @@ class ViewFilters {
         element.addEventListener("change", this.onProviderFilterChange);
       });
     }
+    if (this.sortFilters.length) {
+      this.sortFilters.forEach(element => {
+        element.addEventListener("change", this.onSortFilterChange);
+      });
+    }
   }
 
   removeFilterEventHandlers() {
@@ -34,6 +43,11 @@ class ViewFilters {
     if (this.providerFilters.length) {
       this.providerFilters.forEach(element => {
         element.removeEventListener("change", this.onProviderFilterChange);
+      });
+    }
+    if (this.sortFilters.length) {
+      this.sortFilters.forEach(element => {
+        element.removeEventListener("change", this.onSortFilterChange);
       });
     }
   }
@@ -53,6 +67,11 @@ class ViewFilters {
     }
   }
 
+  onSortFilterChange(event) {
+    const {value} = event.target;
+    this.store.setSortFilter(value);
+  }
+
   update(state) {
     if (state.deals.length) {
       this.providerFilters.forEach(element => {
@@ -62,6 +81,9 @@ class ViewFilters {
         element =>
           element.hasAttribute("disabled") &&
           element.removeAttribute("disabled")
+      );
+      this.sortFilters.forEach(
+        element => element.hasAttribute("disabled") && element.removeAttribute("disabled")
       );
     } else {
       this.providerFilters.forEach(
@@ -73,6 +95,9 @@ class ViewFilters {
         element =>
           !element.hasAttribute("disabled") &&
           element.setAttribute("disabled", "disabled")
+      );
+      this.sortFilters.forEach(
+        element => !element.hasAttribute("disabled") && element.setAttribute("disabled", "disabled")
       );
     }
   }
